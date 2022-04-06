@@ -16,9 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -37,7 +39,8 @@ public class StartQuizActivity extends AppCompatActivity {
     private String[] continentsArray = {"Asia", "Africa" , "Europe", "North America", "South America" , "Oceania"};
     private List<String> continentsList = Arrays.asList(continentsArray);
     private Question[] allQuestions;
-    private Quiz newQuiz;
+    private Quiz currentQuiz;
+    private String pattern = "yyyy-MM-dd";
 
     /*
         onCreate method that is called when the activity is created.
@@ -76,9 +79,9 @@ public class StartQuizActivity extends AppCompatActivity {
         Question question6 = new Question(shuffledCountry.get(5).getCountryName(),shuffledCountry.get(5).getContinent());
         // Creating an array of questions to pass to the Quiz object.
         allQuestions = new Question[]{question1, question2, question3, question4, question5, question6};
-        // Creating the Quiz object and passing the Array of Question objects to it.
-        newQuiz = new Quiz();
-        newQuiz.setCountryQs(allQuestions);
+        currentQuiz = new Quiz();
+        currentQuiz.setCountryQs(allQuestions);
+
     }
 
     /*
@@ -115,8 +118,8 @@ public class StartQuizActivity extends AppCompatActivity {
         // Once you have reached the results page, it will calculate the results of the quiz and tell the user how many they got correct.
         // It will also hide the RadioGroup and RadioButtons and make the buttons for starting a new quiz and seeing past results visible to the user.
         if (sectionNumber == 7) {
-            newQuiz.calculateResult();
-            textView.setText("You answered " + newQuiz.getResult() + " questions correctly!");
+            currentQuiz.calculateResult();
+            textView.setText("You answered " + currentQuiz.getResult() + " questions correctly!");
             radioGroup.setVisibility(View.GONE); // Hiding RadioGroup and its buttons.
             startNewQuiz.setVisibility(View.VISIBLE); // Making Start New Quiz Button visible and setting its onClick.
             startNewQuiz.setOnClickListener(new StartNewQuizButtonListener());
@@ -188,6 +191,20 @@ public class StartQuizActivity extends AppCompatActivity {
     private class SeeResultsButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            String dateString = new SimpleDateFormat(pattern).format( new Date());
+            Question[] checkRes =currentQuiz.getCountryQs();
+            int resultyio = 0;
+            for ( int i=0; i<6; i++ )
+            {
+                if ( checkRes[i].getCorrectlyAnswered() )
+                    resultyio++;
+            } // for
+
+            currentQuiz.setResult(resultyio);
+            currentQuiz.setQuizDate( dateString );
+
+            new QuizDBWriter().execute( currentQuiz ); // store the lines into new country objects
+
             Intent intent = new Intent(v.getContext(), ResultsActivity.class);
             finish();
             startActivity(intent);
@@ -214,6 +231,27 @@ public class StartQuizActivity extends AppCompatActivity {
             shuffledCountry = new ArrayList<Country>();
             shuffledCountry.addAll(cList);
 
+        }
+    }
+
+    // This is an AsyncTask class (it extends AsyncTask) to perform DB writing of the countries, asynchronously.
+    public class QuizDBWriter extends AsyncTask<Quiz, Quiz> {
+
+        // method for background storage of these
+        @Override
+        protected Quiz doInBackground( Quiz... quizzes ) {
+            DBAccess.storeQuiz( quizzes[0] );
+            return quizzes[0];
+        }
+
+        // method for demonstrating the end of storing the country into our database
+        @Override
+        protected void onPostExecute( Quiz quiz ) {
+            // Show a quick confirmation message
+            Toast.makeText( getApplicationContext(), "Quiz created for " + quiz.getId() + ", " + quiz.getQuizDate() + ", " + quiz.getResult(),
+                    Toast.LENGTH_SHORT).show();
+
+            Log.d( TAG, "Quiz saved: " + quiz );
         }
     }
 
