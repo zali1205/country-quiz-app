@@ -3,9 +3,18 @@ package edu.uga.cs.countryquiz;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import android.widget.Toast;
+
+import com.opencsv.CSVReader;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /*
     This is the main activity where the application starts. The Main Activity class presents to the user what the application is about
@@ -13,8 +22,14 @@ import android.widget.Button;
  */
 public class MainActivity extends AppCompatActivity {
 
+    final String PREFERENCE = "ForFirstBoot";
+
+    private String TAG = "csving";
+
     Button results;
     Button startQuiz;
+
+    private CountryQuizData countryQuizData = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +48,29 @@ public class MainActivity extends AppCompatActivity {
         // Setting the onClickListeners for the result button
         results.setOnClickListener(new ResultsButtonListener());
 
+        SharedPreferences settings = getSharedPreferences(PREFERENCE, 0); // find the shared preference from settings
+        if( settings.getBoolean("first_open",true) ) { // if true initialize DB
 
+            countryQuizData = new CountryQuizData(this); // create new instance
+
+            countryQuizData.open(); // open data for writing into
+            try {
+                // Open the CSV data file in the assets folder
+                InputStream in_s = getAssets().open("country_continent.csv");
+
+                // read the CSV data
+                CSVReader reader = new CSVReader(new InputStreamReader(in_s));
+                String[] nextRow;
+                while ((nextRow = reader.readNext()) != null) {
+                    new CountryQuizDBWriter().execute(new Country(nextRow[0], nextRow[1])); // store the lines into new country objects
+                }
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+
+            countryQuizData.close(); // close out connection
+            settings.edit().putBoolean("first_open", false ).commit(); // show that the database has been set
+        } // if
     }
 
     /*
@@ -60,6 +97,27 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    // This is an AsyncTask class (it extends AsyncTask) to perform DB writing of the countries, asynchronously.
+    public class CountryQuizDBWriter extends AsyncTask<Country, Country> {
+
+        // method for background storage of these
+        @Override
+        protected Country doInBackground( Country... countries ) {
+            countryQuizData.storeCountry( countries[0] );
+            return countries[0];
+        }
+
+        // method for demonstrating the end of storing the country into our database
+        @Override
+        protected void onPostExecute( Country country ) {
+            // Show a quick confirmation message
+            Toast.makeText( getApplicationContext(), "Country created for " + country.getId() + ", " + country.getCountryName() + ", " + country.getContinent(),
+                    Toast.LENGTH_SHORT).show();
+
+            Log.d( TAG, "Country saved: " + country );
+        }
     }
 
 

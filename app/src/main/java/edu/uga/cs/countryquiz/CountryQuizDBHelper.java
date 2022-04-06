@@ -16,7 +16,7 @@ public class CountryQuizDBHelper extends SQLiteOpenHelper {
 
     private static final String DEBUG_TAG = "CountryQuizDBHelper";
 
-    private static final String DB_NAME = "CountryQuiz.db";
+    private static final String DB_NAME = "countryQuiz.db";
     private static final int DB_VERSION = 1;
 
     // Define the the table & column names for the countries
@@ -58,8 +58,9 @@ public class CountryQuizDBHelper extends SQLiteOpenHelper {
     // For finding access for other classes and synchronized to it doesn't get done twice or more
     public static synchronized CountryQuizDBHelper getInstance( Context context ) {
         // if not instantiated create first instance
-        if( helperInstance != null ) {
+        if( helperInstance == null ) {
             helperInstance = new CountryQuizDBHelper( context.getApplicationContext() );
+            Log.d( DEBUG_TAG, "helper instance created" );
         }
         return helperInstance;
     }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is facilitates storing and restoring countries and quizzes from the database.
+ * This class facilitates storing and restoring countries and quizzes from the database.
  *
  * Author - Drew Jenkins
  */
