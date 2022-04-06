@@ -29,14 +29,14 @@ public class StartQuizActivity extends AppCompatActivity {
     final String TAG = "";
 
     private CountryQuizData DBAccess = null;
-
-    SectionsPagerAdapter mainSectionsPagerAdapter;
-    ViewPager2 mainViewPager;
-    ActionBar mainActionBar;
-    List<Country> unshuffledCountry;
-    List<Country> shuffledCountry;
-    String[] continentsArray = {"Asia", "Africa" , "Europe", "North America", "South America" , "Oceania"};
-    List<String> continentsList = Arrays.asList(continentsArray);
+    private SectionsPagerAdapter mainSectionsPagerAdapter;
+    private ViewPager2 mainViewPager;
+    private ActionBar mainActionBar;
+    private List<Country> unshuffledCountry;
+    private List<Country> shuffledCountry;
+    private String[] continentsArray = {"Asia", "Africa" , "Europe", "North America", "South America" , "Oceania"};
+    private List<String> continentsList = Arrays.asList(continentsArray);
+    private Question[] allQuestions;
 
     /*
         onCreate method that is called when the activity is created.
@@ -66,6 +66,16 @@ public class StartQuizActivity extends AppCompatActivity {
         waitUp.onPostExecute( unshuffledCountry );
         Collections.shuffle(shuffledCountry); // shuffle the retrieved data for seeding in our questions
 
+        Question question1 = new Question(shuffledCountry.get(0).getCountryName(),shuffledCountry.get(0).getContinent());
+        Question question2 = new Question(shuffledCountry.get(1).getCountryName(),shuffledCountry.get(1).getContinent());
+        Question question3 = new Question(shuffledCountry.get(2).getCountryName(),shuffledCountry.get(2).getContinent());
+        Question question4 = new Question(shuffledCountry.get(3).getCountryName(),shuffledCountry.get(3).getContinent());
+        Question question5 = new Question(shuffledCountry.get(4).getCountryName(),shuffledCountry.get(4).getContinent());
+        Question question6 = new Question(shuffledCountry.get(5).getCountryName(),shuffledCountry.get(5).getContinent());
+        allQuestions = new Question[]{question1, question2, question3, question4, question5, question6};
+        Quiz newQuiz = new Quiz();
+        newQuiz.setCountryQs(allQuestions);
+
     }
 
     /*
@@ -80,25 +90,44 @@ public class StartQuizActivity extends AppCompatActivity {
             startNewQuiz.setOnClickListener(new StartNewQuizButtonListener());
             seeResults.setVisibility(View.VISIBLE);
             seeResults.setOnClickListener(new SeeResultsButtonListener());
+            mainViewPager.setUserInputEnabled(false);
         }
 
         if (sectionNumber == 1) {
-            textView.setText( shuffledCountry.get(0).getCountryName());
+            textView.setText(allQuestions[0].getDescription());
+            radioButtons[0].setText(allQuestions[0].getTotalAnswers().get(0));
+            radioButtons[1].setText(allQuestions[0].getTotalAnswers().get(1));
+            radioButtons[2].setText(allQuestions[0].getTotalAnswers().get(2));
         }
         if (sectionNumber == 2) {
-
+            textView.setText(allQuestions[1].getDescription());
+            radioButtons[0].setText(allQuestions[1].getTotalAnswers().get(0));
+            radioButtons[1].setText(allQuestions[1].getTotalAnswers().get(1));
+            radioButtons[2].setText(allQuestions[1].getTotalAnswers().get(2));
         }
         if (sectionNumber == 3) {
-
+            textView.setText(allQuestions[2].getDescription());
+            radioButtons[0].setText(allQuestions[2].getTotalAnswers().get(0));
+            radioButtons[1].setText(allQuestions[2].getTotalAnswers().get(1));
+            radioButtons[2].setText(allQuestions[2].getTotalAnswers().get(2));
         }
         if (sectionNumber == 4) {
-
+            textView.setText(allQuestions[3].getDescription());
+            radioButtons[0].setText(allQuestions[3].getTotalAnswers().get(0));
+            radioButtons[1].setText(allQuestions[3].getTotalAnswers().get(1));
+            radioButtons[2].setText(allQuestions[3].getTotalAnswers().get(2));
         }
         if (sectionNumber == 5) {
-
+            textView.setText(allQuestions[4].getDescription());
+            radioButtons[0].setText(allQuestions[4].getTotalAnswers().get(0));
+            radioButtons[1].setText(allQuestions[4].getTotalAnswers().get(1));
+            radioButtons[2].setText(allQuestions[4].getTotalAnswers().get(2));
         }
         if (sectionNumber == 6) {
-
+            textView.setText(allQuestions[5].getDescription());
+            radioButtons[0].setText(allQuestions[5].getTotalAnswers().get(0));
+            radioButtons[1].setText(allQuestions[5].getTotalAnswers().get(1));
+            radioButtons[2].setText(allQuestions[5].getTotalAnswers().get(2));
         }
     }
 

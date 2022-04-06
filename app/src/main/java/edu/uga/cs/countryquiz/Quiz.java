@@ -69,7 +69,7 @@ public class Quiz {
         return countryQs;
     }
 
-    public void setResult(Question[] countryQs)
+    public void setCountryQs(Question[] countryQs)
     {
         this.countryQs = countryQs;
     }

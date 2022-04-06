@@ -1,5 +1,6 @@
 package edu.uga.cs.countryquiz;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +17,7 @@ public class Question {
     private String countryName;
     private String continent;
     private String description;
-    private String[] wrongAnswers = new String[2];
+    private List<String> totalAnswers = new ArrayList<String>();
     private boolean correctlyAnswered = false;
 
     public Question()
@@ -33,15 +34,17 @@ public class Question {
 
         Collections.shuffle(continentsList);
         if (continentsList.get(0).equals(continent)) {
-            wrongAnswers[0] = continentsList.get(2);
+            totalAnswers.add(continentsList.get(2));
         } else {
-            wrongAnswers[0] = continentsList.get(0);
+            totalAnswers.add(continentsList.get(0));
         }
         if (continentsList.get(1).equals(continent)) {
-            wrongAnswers[1] = continentsList.get(2);
+            totalAnswers.add(continentsList.get(2));
         } else {
-            wrongAnswers[1] = continentsList.get(1);
+            totalAnswers.add(continentsList.get(1));
         }
+        totalAnswers.add(continent);
+        Collections.shuffle(totalAnswers);
     }
 
     public String getCountryName()
@@ -82,7 +85,7 @@ public class Question {
         return this.correctlyAnswered;
     }
 
-    public String[] getWrongAnswers() {
-        return wrongAnswers;
+    public List<String> getTotalAnswers() {
+        return totalAnswers;
     }
 }
