@@ -50,7 +50,6 @@ public class StartQuizActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_quiz);
-        //
         DBAccess = new CountryQuizData(this);
         // open for accessing the database
         DBAccess.open();
@@ -134,9 +133,9 @@ public class StartQuizActivity extends AppCompatActivity {
      */
     private void setTextAndButtons(TextView textView, RadioButton[] radioButtons, int questionNumber) {
         textView.setText(allQuestions[questionNumber].getDescription());
-        radioButtons[0].setText(allQuestions[questionNumber].getTotalAnswers().get(0));
-        radioButtons[1].setText(allQuestions[questionNumber].getTotalAnswers().get(1));
-        radioButtons[2].setText(allQuestions[questionNumber].getTotalAnswers().get(2));
+        radioButtons[0].setText("A- " + allQuestions[questionNumber].getTotalAnswers().get(0));
+        radioButtons[1].setText("B- " + allQuestions[questionNumber].getTotalAnswers().get(1));
+        radioButtons[2].setText("C- " + allQuestions[questionNumber].getTotalAnswers().get(2));
     }
 
     /*
@@ -148,9 +147,10 @@ public class StartQuizActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId != -1) {
                     RadioButton rb = findViewById(checkedId);
-                    if (rb.getText().equals(allQuestions[questionNumber].getContinent())) {
+                    String compare = rb.getText().toString();
+                    if (compare.substring( 3 ).equals(allQuestions[questionNumber].getContinent())) {
                         allQuestions[questionNumber].setCorrectlyAnswered(true);
-                     //   Toast.makeText(getApplicationContext(), "NICE", Toast.LENGTH_SHORT).show();
+                       Toast.makeText(getApplicationContext(), "NICE", Toast.LENGTH_SHORT).show();
                     } else {
                         allQuestions[questionNumber].setCorrectlyAnswered(false);
                      //   Toast.makeText(getApplicationContext(), "WRONG", Toast.LENGTH_SHORT).show();

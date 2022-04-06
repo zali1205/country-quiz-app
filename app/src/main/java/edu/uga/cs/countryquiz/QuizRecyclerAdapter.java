@@ -48,7 +48,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter<QuizRecyclerAdapte
     public void onBindViewHolder( QuizHolder holder, int position ) {
         Quiz quiz = quizList.get( position );
 
-        holder.id.setText( "Set :\t\t\t" + quiz.getId() );
+        holder.id.setText( "Set # :\t\t\t" + quiz.getId() );
         holder.date.setText( "Date :\t\t\t" + quiz.getQuizDate() );
         holder.result.setText( "# correct : \t"+ quiz.getResult() );
     }

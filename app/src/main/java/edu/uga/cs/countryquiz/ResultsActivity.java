@@ -31,10 +31,6 @@ public class ResultsActivity extends AppCompatActivity {
 
         recyclerView = findViewById( R.id.recyclerView );
 
-        // use a linear layout manager for the recycler view
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
         quizList = new ArrayList<Quiz>();
         recyclerAdapter = new QuizRecyclerAdapter( quizList );
         recyclerView.setAdapter( recyclerAdapter );
@@ -45,6 +41,10 @@ public class ResultsActivity extends AppCompatActivity {
         // Execute the retrieval of the job leads in an asynchronous way,
         // without blocking the main UI thread.
         new QuizDBReader().execute();
+
+        // use a linear layout manager for the recycler view
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
     }
 
     // async reading of country table
@@ -63,7 +63,6 @@ public class ResultsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute( List<Quiz> qList ) {
             Log.d( TAG, " qList.size(): " + qList.size() );
-            quizList = new ArrayList<Quiz>();
             quizList.addAll(qList);
             recyclerAdapter.notifyDataSetChanged();
         }
