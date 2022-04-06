@@ -33,7 +33,7 @@ public class Question {
 
         Collections.shuffle(continentsList);
         if (continentsList.get(0).equals(continent)) {
-            wrongAnswers[0] = continentsList.get(1);
+            wrongAnswers[0] = continentsList.get(2);
         } else {
             wrongAnswers[0] = continentsList.get(0);
         }

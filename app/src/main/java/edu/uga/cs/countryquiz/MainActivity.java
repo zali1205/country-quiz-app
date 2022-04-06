@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 CSVReader reader = new CSVReader(new InputStreamReader(in_s));
                 String[] nextRow;
                 while ((nextRow = reader.readNext()) != null) {
-                    new CountryQuizDBWriter().execute(new Country(nextRow[0], nextRow[1])); // store the lines into new country objects
+                    new CountryDBWriter().execute(new Country(nextRow[0], nextRow[1])); // store the lines into new country objects
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // This is an AsyncTask class (it extends AsyncTask) to perform DB writing of the countries, asynchronously.
-    public class CountryQuizDBWriter extends AsyncTask<Country, Country> {
+    public class CountryDBWriter extends AsyncTask<Country, Country> {
 
         // method for background storage of these
         @Override

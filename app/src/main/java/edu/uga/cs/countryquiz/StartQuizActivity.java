@@ -26,9 +26,14 @@ import java.util.List;
     quiz questions.
  */
 public class StartQuizActivity extends AppCompatActivity {
+    final String TAG = "";
+
+    private CountryQuizData DBAccess = null;
+
     SectionsPagerAdapter mainSectionsPagerAdapter;
     ViewPager2 mainViewPager;
     ActionBar mainActionBar;
+    List<Country> unshuffledCountry;
     List<Country> shuffledCountry;
     String[] continentsArray = {"Asia", "Africa" , "Europe", "North America", "South America" , "Oceania"};
     List<String> continentsList = Arrays.asList(continentsArray);
@@ -41,14 +46,12 @@ public class StartQuizActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_quiz);
-        CountryQuizData DBAccess = new CountryQuizData(this);
-
-
-
-        //shuffledCountry = DBAccess.retrieveAllCountries();
-
-        //Collections.shuffle(shuffledCountry);
-
+        //
+        DBAccess = new CountryQuizData(this);
+        // open for accessing the database
+        DBAccess.open();
+        CountryDBReader waitUp = new CountryDBReader(); // retrieves the countries to store in list without interruption
+        unshuffledCountry = waitUp.doInBackground();
 
 
         mainActionBar = getSupportActionBar();
@@ -59,6 +62,9 @@ public class StartQuizActivity extends AppCompatActivity {
         mainViewPager.setAdapter(mainSectionsPagerAdapter);
 
         mainViewPager.registerOnPageChangeCallback(new viewPagerOnPageChange());
+
+        // waitUp.onPostExecute( unshuffledCountry );
+        Collections.shuffle(shuffledCountry); // shuffle the retrieved data for seeding in our questions
 
     }
 
@@ -77,7 +83,7 @@ public class StartQuizActivity extends AppCompatActivity {
         }
 
         if (sectionNumber == 1) {
-
+            textView.setText( shuffledCountry.get(0).getCountryName());
         }
         if (sectionNumber == 2) {
 
@@ -134,6 +140,44 @@ public class StartQuizActivity extends AppCompatActivity {
         }
     }
 
+
+    // async reading of country table
+    private class CountryDBReader extends AsyncTask<Void, List<Country>> {
+        // return current list of countries read from sqlite database async
+        @Override
+        protected List<Country> doInBackground( Void... params ) {
+            List<Country> countriesList = DBAccess.retrieveAllCountries();
+
+            Log.d( TAG, "Countries retrieved: " + countriesList.size() );
+
+            return countriesList;
+        }
+
+        // method for adding the results into the country list upon completion
+        @Override
+        protected void onPostExecute( List<Country> cList ) {
+            Log.d( TAG, "cList.size(): " + cList.size() );
+            shuffledCountry = new ArrayList<Country>();
+            shuffledCountry.addAll(cList);
+
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        // open the database in onResume
+        if( DBAccess != null && !DBAccess.isDBOpen() )
+            DBAccess.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        // close the database in onPause
+        if( DBAccess != null )
+            DBAccess.close();
+        super.onPause();
+    }
 
 
 
