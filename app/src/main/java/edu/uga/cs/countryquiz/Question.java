@@ -27,7 +27,7 @@ public class Question {
         this.description = null;
     }
 
-    public Question( String countryName, String continent ) {
+    public Question(String countryName, String continent) {
         this.countryName = countryName;
         this.continent = continent;
         this.description = "What continent is " + this.countryName + " in?";
@@ -47,33 +47,27 @@ public class Question {
         Collections.shuffle(totalAnswers);
     }
 
-    public String getCountryName()
-    {
+    public String getCountryName() {
         return countryName;
     }
 
-    public void setCountryName(String countryName)
-    {
+    public void setCountryName(String countryName) {
         this.countryName = countryName;
     }
 
-    public String getContinent()
-    {
+    public String getContinent() {
         return continent;
     }
 
-    public void setContinent(String continent)
-    {
+    public void setContinent(String continent) {
         this.continent = continent;
     }
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description)
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 

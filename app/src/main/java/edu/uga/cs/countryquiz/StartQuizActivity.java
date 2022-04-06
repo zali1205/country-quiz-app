@@ -37,6 +37,7 @@ public class StartQuizActivity extends AppCompatActivity {
     private String[] continentsArray = {"Asia", "Africa" , "Europe", "North America", "South America" , "Oceania"};
     private List<String> continentsList = Arrays.asList(continentsArray);
     private Question[] allQuestions;
+    private Quiz newQuiz;
 
     /*
         onCreate method that is called when the activity is created.
@@ -66,16 +67,18 @@ public class StartQuizActivity extends AppCompatActivity {
         waitUp.onPostExecute( unshuffledCountry );
         Collections.shuffle(shuffledCountry); // shuffle the retrieved data for seeding in our questions
 
+        // Creating the Question objects for the Quiz object. Since the country list has already been shuffled, the questions objects will take the first 6 randomized countries.
         Question question1 = new Question(shuffledCountry.get(0).getCountryName(),shuffledCountry.get(0).getContinent());
         Question question2 = new Question(shuffledCountry.get(1).getCountryName(),shuffledCountry.get(1).getContinent());
         Question question3 = new Question(shuffledCountry.get(2).getCountryName(),shuffledCountry.get(2).getContinent());
         Question question4 = new Question(shuffledCountry.get(3).getCountryName(),shuffledCountry.get(3).getContinent());
         Question question5 = new Question(shuffledCountry.get(4).getCountryName(),shuffledCountry.get(4).getContinent());
         Question question6 = new Question(shuffledCountry.get(5).getCountryName(),shuffledCountry.get(5).getContinent());
+        // Creating an array of questions to pass to the Quiz object.
         allQuestions = new Question[]{question1, question2, question3, question4, question5, question6};
-        Quiz newQuiz = new Quiz();
+        // Creating the Quiz object and passing the Array of Question objects to it.
+        newQuiz = new Quiz();
         newQuiz.setCountryQs(allQuestions);
-
     }
 
     /*
@@ -84,50 +87,69 @@ public class StartQuizActivity extends AppCompatActivity {
      */
     public void loadSection(int sectionNumber, TextView textView, RadioGroup radioGroup, RadioButton[] radioButtons, Button startNewQuiz, Button seeResults) {
 
+        // Setting all of the appropriate TextView, Buttons, and RadioGroupListeners for each of the questions.
         if (sectionNumber == 1) {
-            textView.setText(allQuestions[0].getDescription());
-            radioButtons[0].setText(allQuestions[0].getTotalAnswers().get(0));
-            radioButtons[1].setText(allQuestions[0].getTotalAnswers().get(1));
-            radioButtons[2].setText(allQuestions[0].getTotalAnswers().get(2));
+            setTextAndButtons(textView, radioButtons, 0);
+            setRadioGroupListeners(radioGroup, 0);
         }
         if (sectionNumber == 2) {
-            textView.setText(allQuestions[1].getDescription());
-            radioButtons[0].setText(allQuestions[1].getTotalAnswers().get(0));
-            radioButtons[1].setText(allQuestions[1].getTotalAnswers().get(1));
-            radioButtons[2].setText(allQuestions[1].getTotalAnswers().get(2));
+            setTextAndButtons(textView, radioButtons, 1);
+            setRadioGroupListeners(radioGroup, 1);
         }
         if (sectionNumber == 3) {
-            textView.setText(allQuestions[2].getDescription());
-            radioButtons[0].setText(allQuestions[2].getTotalAnswers().get(0));
-            radioButtons[1].setText(allQuestions[2].getTotalAnswers().get(1));
-            radioButtons[2].setText(allQuestions[2].getTotalAnswers().get(2));
+            setTextAndButtons(textView, radioButtons, 2);
+            setRadioGroupListeners(radioGroup, 2);
         }
         if (sectionNumber == 4) {
-            textView.setText(allQuestions[3].getDescription());
-            radioButtons[0].setText(allQuestions[3].getTotalAnswers().get(0));
-            radioButtons[1].setText(allQuestions[3].getTotalAnswers().get(1));
-            radioButtons[2].setText(allQuestions[3].getTotalAnswers().get(2));
+            setTextAndButtons(textView, radioButtons, 3);
+            setRadioGroupListeners(radioGroup, 3);
         }
         if (sectionNumber == 5) {
-            textView.setText(allQuestions[4].getDescription());
-            radioButtons[0].setText(allQuestions[4].getTotalAnswers().get(0));
-            radioButtons[1].setText(allQuestions[4].getTotalAnswers().get(1));
-            radioButtons[2].setText(allQuestions[4].getTotalAnswers().get(2));
+            setTextAndButtons(textView, radioButtons, 4);
+            setRadioGroupListeners(radioGroup, 4);
         }
         if (sectionNumber == 6) {
-            textView.setText(allQuestions[5].getDescription());
-            radioButtons[0].setText(allQuestions[5].getTotalAnswers().get(0));
-            radioButtons[1].setText(allQuestions[5].getTotalAnswers().get(1));
-            radioButtons[2].setText(allQuestions[5].getTotalAnswers().get(2));
+            setTextAndButtons(textView, radioButtons, 5);
+            setRadioGroupListeners(radioGroup, 5);
         }
+        // Once you have reached the results page, it will calculate the results of the quiz and tell the user how many they got correct.
+        // It will also hide the RadioGroup and RadioButtons and make the buttons for starting a new quiz and seeing past results visible to the user.
         if (sectionNumber == 7) {
-            textView.setText("THIS IS THE RESULTS PAGE");
-            radioGroup.setVisibility(View.GONE);
-            startNewQuiz.setVisibility(View.VISIBLE);
+            newQuiz.calculateResult();
+            textView.setText("You answered " + newQuiz.getResult() + " questions correctly!");
+            radioGroup.setVisibility(View.GONE); // Hiding RadioGroup and its buttons.
+            startNewQuiz.setVisibility(View.VISIBLE); // Making Start New Quiz Button visible and setting its onClick.
             startNewQuiz.setOnClickListener(new StartNewQuizButtonListener());
-            seeResults.setVisibility(View.VISIBLE);
+            seeResults.setVisibility(View.VISIBLE); // Making See Results Button visible and setting its onClick.
             seeResults.setOnClickListener(new SeeResultsButtonListener());
         }
+    }
+
+    /*
+        Helper method that sets the TextView that holds the question for the user and the RadioButtons that hold the answers for the users to the appropriate question.
+     */
+    private void setTextAndButtons(TextView textView, RadioButton[] radioButtons, int questionNumber) {
+        textView.setText(allQuestions[questionNumber].getDescription());
+        radioButtons[0].setText(allQuestions[questionNumber].getTotalAnswers().get(0));
+        radioButtons[1].setText(allQuestions[questionNumber].getTotalAnswers().get(1));
+        radioButtons[2].setText(allQuestions[questionNumber].getTotalAnswers().get(2));
+    }
+
+    private void setRadioGroupListeners(RadioGroup radioGroup, int questionNumber) {
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId != -1) {
+                    RadioButton rb = findViewById(checkedId);
+                    if (rb.getText().equals(allQuestions[questionNumber].getContinent())) {
+                        allQuestions[questionNumber].setCorrectlyAnswered(true);
+                        Toast.makeText(getApplicationContext(), "NICE", Toast.LENGTH_SHORT).show();
+                    } else {
+                        allQuestions[questionNumber].setCorrectlyAnswered(false);
+                        Toast.makeText(getApplicationContext(), "WRONG", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
 
     /*
