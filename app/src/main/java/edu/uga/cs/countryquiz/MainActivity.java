@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute( Country country ) {
             // Show a quick confirmation message
-            Toast.makeText( getApplicationContext(), "Country created for " + country.getId() + ", " + country.getCountryName() + ", " + country.getContinent(),
-                    Toast.LENGTH_SHORT).show();
+            // Toast.makeText( getApplicationContext(), "Country created for " + country.getId() + ", " + country.getCountryName() + ", " + country.getContinent(),
+            // Toast.LENGTH_SHORT).show();
 
             Log.d( TAG, "Country saved: " + country );
         }

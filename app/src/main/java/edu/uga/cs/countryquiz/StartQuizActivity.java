@@ -150,10 +150,10 @@ public class StartQuizActivity extends AppCompatActivity {
                     RadioButton rb = findViewById(checkedId);
                     if (rb.getText().equals(allQuestions[questionNumber].getContinent())) {
                         allQuestions[questionNumber].setCorrectlyAnswered(true);
-                        Toast.makeText(getApplicationContext(), "NICE", Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(getApplicationContext(), "NICE", Toast.LENGTH_SHORT).show();
                     } else {
                         allQuestions[questionNumber].setCorrectlyAnswered(false);
-                        Toast.makeText(getApplicationContext(), "WRONG", Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(getApplicationContext(), "WRONG", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -173,6 +173,15 @@ public class StartQuizActivity extends AppCompatActivity {
             // Once the user has reached the last section (the results page), it does not allow backwards scrolling. This is so that the user cannot go back and change answers once submitted.
             if (position == 6) {
                 mainViewPager.setUserInputEnabled(false);
+
+                String dateString = new SimpleDateFormat(pattern).format( new Date());
+                currentQuiz.calculateResult();
+                int result = currentQuiz.getResult();
+
+                currentQuiz.setResult(result);
+                currentQuiz.setQuizDate( dateString );
+
+                new QuizDBWriter().execute( currentQuiz ); // store the lines into new country objects
             }
         }
 
@@ -196,20 +205,6 @@ public class StartQuizActivity extends AppCompatActivity {
     private class SeeResultsButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            String dateString = new SimpleDateFormat(pattern).format( new Date());
-            Question[] checkRes =currentQuiz.getCountryQs();
-            int resultyio = 0;
-            for ( int i=0; i<6; i++ )
-            {
-                if ( checkRes[i].getCorrectlyAnswered() )
-                    resultyio++;
-            } // for
-
-            currentQuiz.setResult(resultyio);
-            currentQuiz.setQuizDate( dateString );
-
-            new QuizDBWriter().execute( currentQuiz ); // store the lines into new country objects
-
             Intent intent = new Intent(v.getContext(), ResultsActivity.class);
             finish();
             startActivity(intent);
@@ -253,8 +248,8 @@ public class StartQuizActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute( Quiz quiz ) {
             // Show a quick confirmation message
-            Toast.makeText( getApplicationContext(), "Quiz created for " + quiz.getId() + ", " + quiz.getQuizDate() + ", " + quiz.getResult(),
-                    Toast.LENGTH_SHORT).show();
+           // Toast.makeText( getApplicationContext(), "Quiz created for " + quiz.getId() + ", " + quiz.getQuizDate() + ", " + quiz.getResult(),
+                  //  Toast.LENGTH_SHORT).show();
 
             Log.d( TAG, "Quiz saved: " + quiz );
         }
