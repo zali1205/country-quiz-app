@@ -83,15 +83,6 @@ public class StartQuizActivity extends AppCompatActivity {
         It has access to the TextView, RadioGroup, and the Radio Buttons in order to set them to the appropriate questions and potential answers.
      */
     public void loadSection(int sectionNumber, TextView textView, RadioGroup radioGroup, RadioButton[] radioButtons, Button startNewQuiz, Button seeResults) {
-        if (sectionNumber == 7) {
-            textView.setText("THIS IS THE RESULTS PAGE");
-            radioGroup.setVisibility(View.GONE);
-            startNewQuiz.setVisibility(View.VISIBLE);
-            startNewQuiz.setOnClickListener(new StartNewQuizButtonListener());
-            seeResults.setVisibility(View.VISIBLE);
-            seeResults.setOnClickListener(new SeeResultsButtonListener());
-            mainViewPager.setUserInputEnabled(false);
-        }
 
         if (sectionNumber == 1) {
             textView.setText(allQuestions[0].getDescription());
@@ -129,6 +120,14 @@ public class StartQuizActivity extends AppCompatActivity {
             radioButtons[1].setText(allQuestions[5].getTotalAnswers().get(1));
             radioButtons[2].setText(allQuestions[5].getTotalAnswers().get(2));
         }
+        if (sectionNumber == 7) {
+            textView.setText("THIS IS THE RESULTS PAGE");
+            radioGroup.setVisibility(View.GONE);
+            startNewQuiz.setVisibility(View.VISIBLE);
+            startNewQuiz.setOnClickListener(new StartNewQuizButtonListener());
+            seeResults.setVisibility(View.VISIBLE);
+            seeResults.setOnClickListener(new SeeResultsButtonListener());
+        }
     }
 
     /*
@@ -141,6 +140,10 @@ public class StartQuizActivity extends AppCompatActivity {
         @Override
         public void onPageSelected(int position) {
             mainActionBar.setTitle(mainSectionsPagerAdapter.getPageTitle(position));
+            // Once the user has reached the last section (the results page), it does not allow backwards scrolling. This is so that the user cannot go back and change answers once submitted.
+            if (position == 6) {
+                mainViewPager.setUserInputEnabled(false);
+            }
         }
 
     }
