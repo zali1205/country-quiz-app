@@ -16,9 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -37,6 +39,8 @@ public class StartQuizActivity extends AppCompatActivity {
     private String[] continentsArray = {"Asia", "Africa" , "Europe", "North America", "South America" , "Oceania"};
     private List<String> continentsList = Arrays.asList(continentsArray);
     private Question[] allQuestions;
+    private Quiz currentQuiz;
+    private String pattern = "yyyy-MM-dd";
 
     /*
         onCreate method that is called when the activity is created.
@@ -73,8 +77,8 @@ public class StartQuizActivity extends AppCompatActivity {
         Question question5 = new Question(shuffledCountry.get(4).getCountryName(),shuffledCountry.get(4).getContinent());
         Question question6 = new Question(shuffledCountry.get(5).getCountryName(),shuffledCountry.get(5).getContinent());
         allQuestions = new Question[]{question1, question2, question3, question4, question5, question6};
-        Quiz newQuiz = new Quiz();
-        newQuiz.setCountryQs(allQuestions);
+        currentQuiz = new Quiz();
+        currentQuiz.setCountryQs(allQuestions);
 
     }
 
@@ -166,6 +170,20 @@ public class StartQuizActivity extends AppCompatActivity {
     private class SeeResultsButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            String dateString = new SimpleDateFormat(pattern).format( new Date());
+            Question[] checkRes =currentQuiz.getCountryQs();
+            int resultyio = 0;
+            for ( int i=0; i<6; i++ )
+            {
+                if ( checkRes[i].getCorrectlyAnswered() )
+                    resultyio++;
+            } // for
+
+            currentQuiz.setResult(resultyio);
+            currentQuiz.setQuizDate( dateString );
+
+            new QuizDBWriter().execute( currentQuiz ); // store the lines into new country objects
+
             Intent intent = new Intent(v.getContext(), ResultsActivity.class);
             finish();
             startActivity(intent);
@@ -192,6 +210,27 @@ public class StartQuizActivity extends AppCompatActivity {
             shuffledCountry = new ArrayList<Country>();
             shuffledCountry.addAll(cList);
 
+        }
+    }
+
+    // This is an AsyncTask class (it extends AsyncTask) to perform DB writing of the countries, asynchronously.
+    public class QuizDBWriter extends AsyncTask<Quiz, Quiz> {
+
+        // method for background storage of these
+        @Override
+        protected Quiz doInBackground( Quiz... quizzes ) {
+            DBAccess.storeQuiz( quizzes[0] );
+            return quizzes[0];
+        }
+
+        // method for demonstrating the end of storing the country into our database
+        @Override
+        protected void onPostExecute( Quiz quiz ) {
+            // Show a quick confirmation message
+            Toast.makeText( getApplicationContext(), "Quiz created for " + quiz.getId() + ", " + quiz.getQuizDate() + ", " + quiz.getResult(),
+                    Toast.LENGTH_SHORT).show();
+
+            Log.d( TAG, "Quiz saved: " + quiz );
         }
     }
 
