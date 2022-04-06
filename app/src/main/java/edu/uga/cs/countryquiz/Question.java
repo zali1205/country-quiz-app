@@ -81,4 +81,8 @@ public class Question {
     public boolean getCorrectlyAnswered() {
         return this.correctlyAnswered;
     }
+
+    public String[] getWrongAnswers() {
+        return wrongAnswers;
+    }
 }

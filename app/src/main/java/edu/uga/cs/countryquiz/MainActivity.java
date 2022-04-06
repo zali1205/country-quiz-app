@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(v.getContext(), StartQuizActivity.class);
             startActivity(intent);
         }
-
     }
     /*
         ResultsButtonListener class that is used to implement the Start Quiz's push button. When the push button is pressed, it will
@@ -94,9 +93,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             Intent intent = new Intent(v.getContext(), ResultsActivity.class);
             startActivity(intent);
-
         }
-
     }
 
     // This is an AsyncTask class (it extends AsyncTask) to perform DB writing of the countries, asynchronously.

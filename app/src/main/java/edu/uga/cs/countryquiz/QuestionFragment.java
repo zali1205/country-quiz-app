@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -21,6 +22,8 @@ public class QuestionFragment extends Fragment {
     private RadioGroup mainRadioGroup;
     private RadioButton radioButton;
     private RadioButton[] radioButtonGroup = new RadioButton[3];
+    private Button startNewQuiz;
+    private Button seeResults;
     /*
         newInstance method
      */
@@ -66,6 +69,8 @@ public class QuestionFragment extends Fragment {
         radioButtonGroup[1] = radioButton;
         radioButton = rootView.findViewById(R.id.radioButton3);
         radioButtonGroup[2] = radioButton;
+        startNewQuiz = rootView.findViewById(R.id.button3);
+        seeResults = rootView.findViewById(R.id.button4);
 
         return rootView;
     }
@@ -77,7 +82,8 @@ public class QuestionFragment extends Fragment {
     public void onViewCreated(View v, Bundle savedInstanceState) {
         super.onViewCreated(this.getView(), savedInstanceState);
         if (StartQuizActivity.class.isInstance(getActivity())) {
-            ((StartQuizActivity) getActivity()).loadSection(questionNumber, mainTextView, mainRadioGroup, radioButtonGroup);
+            ((StartQuizActivity) getActivity()).loadSection(questionNumber, mainTextView, mainRadioGroup, radioButtonGroup, startNewQuiz, seeResults);
         }
     }
+
 }

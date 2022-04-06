@@ -4,9 +4,12 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -29,7 +32,7 @@ public class StartQuizActivity extends AppCompatActivity {
     List<Country> shuffledCountry;
     String[] continentsArray = {"Asia", "Africa" , "Europe", "North America", "South America" , "Oceania"};
     List<String> continentsList = Arrays.asList(continentsArray);
-    
+
     /*
         onCreate method that is called when the activity is created.
      */
@@ -40,9 +43,12 @@ public class StartQuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start_quiz);
         CountryQuizData DBAccess = new CountryQuizData(this);
 
+
+
         //shuffledCountry = DBAccess.retrieveAllCountries();
 
         //Collections.shuffle(shuffledCountry);
+
 
 
         mainActionBar = getSupportActionBar();
@@ -60,23 +66,33 @@ public class StartQuizActivity extends AppCompatActivity {
         This is a method that loads a section of the quiz. The first 6 sections are a question from the quiz and the last section is the results.
         It has access to the TextView, RadioGroup, and the Radio Buttons in order to set them to the appropriate questions and potential answers.
      */
-    public void loadSection(int sectionNumber,TextView textView, RadioGroup radioGroup, RadioButton[] radioButtons) {
+    public void loadSection(int sectionNumber, TextView textView, RadioGroup radioGroup, RadioButton[] radioButtons, Button startNewQuiz, Button seeResults) {
         if (sectionNumber == 7) {
             textView.setText("THIS IS THE RESULTS PAGE");
             radioGroup.setVisibility(View.GONE);
+            startNewQuiz.setVisibility(View.VISIBLE);
+            startNewQuiz.setOnClickListener(new StartNewQuizButtonListener());
+            seeResults.setVisibility(View.VISIBLE);
+            seeResults.setOnClickListener(new SeeResultsButtonListener());
         }
 
         if (sectionNumber == 1) {
+
         }
         if (sectionNumber == 2) {
+
         }
         if (sectionNumber == 3) {
+
         }
         if (sectionNumber == 4) {
+
         }
         if (sectionNumber == 5) {
+
         }
         if (sectionNumber == 6) {
+
         }
     }
 
@@ -93,6 +109,31 @@ public class StartQuizActivity extends AppCompatActivity {
         }
 
     }
+
+    /*
+        This is the OnClickListener for the startNewQuizButton. When the user clicks this, they will be able to start a new quiz.
+     */
+    private class StartNewQuizButtonListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(v.getContext(), StartQuizActivity.class);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    /*
+        This is the OnClickListener for the SeeResultsButton. When the user clicks this, they will be taken to the results page.
+     */
+    private class SeeResultsButtonListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(v.getContext(), ResultsActivity.class);
+            finish();
+            startActivity(intent);
+        }
+    }
+
 
 
 
