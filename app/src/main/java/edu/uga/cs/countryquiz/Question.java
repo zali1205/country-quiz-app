@@ -1,5 +1,9 @@
 package edu.uga.cs.countryquiz;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * POJO for a single instance of a country id, name, continent. id will be -1 if not ready
  *
@@ -7,9 +11,13 @@ package edu.uga.cs.countryquiz;
  */
 public class Question {
 
+    private String[] continentsArray = {"Asia", "Africa" , "Europe", "North America", "South America" , "Oceania"};
+    private List<String> continentsList = Arrays.asList(continentsArray);
     private String countryName;
     private String continent;
     private String description;
+    private String[] wrongAnswers = new String[2];
+    private boolean correctlyAnswered = false;
 
     public Question()
     {
@@ -22,6 +30,18 @@ public class Question {
         this.countryName = countryName;
         this.continent = continent;
         this.description = "What continent is " + this.countryName + " in?";
+
+        Collections.shuffle(continentsList);
+        if (continentsList.get(0).equals(continent)) {
+            wrongAnswers[0] = continentsList.get(1);
+        } else {
+            wrongAnswers[0] = continentsList.get(0);
+        }
+        if (continentsList.get(1).equals(continent)) {
+            wrongAnswers[1] = continentsList.get(2);
+        } else {
+            wrongAnswers[1] = continentsList.get(1);
+        }
     }
 
     public String getCountryName()
@@ -52,5 +72,13 @@ public class Question {
     public void setDescription(String description)
     {
         this.description = description;
+    }
+
+    public void setCorrectlyAnswered(Boolean bool) {
+        this.correctlyAnswered = bool;
+    }
+
+    public boolean getCorrectlyAnswered() {
+        return this.correctlyAnswered;
     }
 }

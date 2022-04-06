@@ -12,6 +12,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /*
     This is the quiz activity that is used when the user would like to start a new quiz. This activity uses a ViewPager2 in order to go through the
     quiz questions.
@@ -20,14 +26,24 @@ public class StartQuizActivity extends AppCompatActivity {
     SectionsPagerAdapter mainSectionsPagerAdapter;
     ViewPager2 mainViewPager;
     ActionBar mainActionBar;
-
+    List<Country> shuffledCountry;
+    String[] continentsArray = {"Asia", "Africa" , "Europe", "North America", "South America" , "Oceania"};
+    List<String> continentsList = Arrays.asList(continentsArray);
+    
     /*
         onCreate method that is called when the activity is created.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_quiz);
+        CountryQuizData DBAccess = new CountryQuizData(this);
+
+        //shuffledCountry = DBAccess.retrieveAllCountries();
+
+        //Collections.shuffle(shuffledCountry);
+
 
         mainActionBar = getSupportActionBar();
         mainSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this.getLifecycle());
@@ -49,12 +65,18 @@ public class StartQuizActivity extends AppCompatActivity {
             textView.setText("THIS IS THE RESULTS PAGE");
             radioGroup.setVisibility(View.GONE);
         }
+
         if (sectionNumber == 1) {
-            radioButtons[0].setText("THIS IS A TEST FOR QUESTION 1. PLEASE CLICK ME");
-            int selectedId = radioGroup.getCheckedRadioButtonId();
         }
         if (sectionNumber == 2) {
-            radioButtons[1].setText("THIS IS A TEST FOR QUESTION 2");
+        }
+        if (sectionNumber == 3) {
+        }
+        if (sectionNumber == 4) {
+        }
+        if (sectionNumber == 5) {
+        }
+        if (sectionNumber == 6) {
         }
     }
 
