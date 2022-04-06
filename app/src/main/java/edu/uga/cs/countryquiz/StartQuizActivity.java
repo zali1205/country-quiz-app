@@ -63,7 +63,7 @@ public class StartQuizActivity extends AppCompatActivity {
 
         mainViewPager.registerOnPageChangeCallback(new viewPagerOnPageChange());
 
-        // waitUp.onPostExecute( unshuffledCountry );
+        waitUp.onPostExecute( unshuffledCountry );
         Collections.shuffle(shuffledCountry); // shuffle the retrieved data for seeding in our questions
 
     }
