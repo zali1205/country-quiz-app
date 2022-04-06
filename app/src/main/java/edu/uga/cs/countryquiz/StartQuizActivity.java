@@ -79,6 +79,7 @@ public class StartQuizActivity extends AppCompatActivity {
         Question question6 = new Question(shuffledCountry.get(5).getCountryName(),shuffledCountry.get(5).getContinent());
         // Creating an array of questions to pass to the Quiz object.
         allQuestions = new Question[]{question1, question2, question3, question4, question5, question6};
+        // Creating a new Quiz object and passing the array of Questions to the Quiz object.
         currentQuiz = new Quiz();
         currentQuiz.setCountryQs(allQuestions);
 
@@ -138,6 +139,10 @@ public class StartQuizActivity extends AppCompatActivity {
         radioButtons[2].setText(allQuestions[questionNumber].getTotalAnswers().get(2));
     }
 
+    /*
+        Helper method that sets the RadioGroupListeners for all of the questions. Depending on the answer selected, it will set the question's boolean value (correctlyAnswered) to true
+        or false.
+     */
     private void setRadioGroupListeners(RadioGroup radioGroup, int questionNumber) {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -255,6 +260,9 @@ public class StartQuizActivity extends AppCompatActivity {
         }
     }
 
+    /*
+        onResume method
+     */
     @Override
     protected void onResume() {
         // open the database in onResume
@@ -263,6 +271,9 @@ public class StartQuizActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    /*
+        onPause method
+     */
     @Override
     protected void onPause() {
         // close the database in onPause
