@@ -15,9 +15,10 @@ import android.widget.TextView;
  */
 public class QuestionFragment extends Fragment {
 
-
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private int questionNumber;
+
+    private int questionNumber; // for which to edit
+    // ui controls
     private TextView mainTextView;
     private RadioGroup mainRadioGroup;
     private RadioButton radioButton;

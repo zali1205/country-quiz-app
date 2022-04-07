@@ -30,16 +30,17 @@ import java.util.List;
 public class StartQuizActivity extends AppCompatActivity {
     final String TAG = "";
 
-    private CountryQuizData DBAccess = null;
     private SectionsPagerAdapter mainSectionsPagerAdapter;
-    private ViewPager2 mainViewPager;
+    private ViewPager2 mainViewPager; // necessary for easy load and reload states without needing to save
     private ActionBar mainActionBar;
-    private List<Country> unshuffledCountry;
-    private List<Country> shuffledCountry;
+
+    private CountryQuizData DBAccess = null; // for accessing singleton
+    private List<Country> unshuffledCountry; // basic list
+    private List<Country> shuffledCountry; // shuffled
     private String[] continentsArray = {"Asia", "Africa" , "Europe", "North America", "South America" , "Oceania"};
-    private List<String> continentsList = Arrays.asList(continentsArray);
-    private Question[] allQuestions;
-    private Quiz currentQuiz;
+    private List<String> continentsList = Arrays.asList(continentsArray); // for accessing all possible continents
+    private Question[] allQuestions; // questions of current quiz
+    private Quiz currentQuiz; // created quiz object
     private String pattern = "yyyy-MM-dd";
 
     /*
@@ -150,7 +151,7 @@ public class StartQuizActivity extends AppCompatActivity {
                     String compare = rb.getText().toString();
                     if (compare.substring( 3 ).equals(allQuestions[questionNumber].getContinent())) {
                         allQuestions[questionNumber].setCorrectlyAnswered(true);
-                       Toast.makeText(getApplicationContext(), "NICE", Toast.LENGTH_SHORT).show();
+                      // Toast.makeText(getApplicationContext(), "NICE", Toast.LENGTH_SHORT).show();
                     } else {
                         allQuestions[questionNumber].setCorrectlyAnswered(false);
                      //   Toast.makeText(getApplicationContext(), "WRONG", Toast.LENGTH_SHORT).show();
@@ -172,12 +173,12 @@ public class StartQuizActivity extends AppCompatActivity {
             mainActionBar.setTitle(mainSectionsPagerAdapter.getPageTitle(position));
             // Once the user has reached the last section (the results page), it does not allow backwards scrolling. This is so that the user cannot go back and change answers once submitted.
             if (position == 6) {
-                mainViewPager.setUserInputEnabled(false);
+                mainViewPager.setUserInputEnabled(false); // lock user from returning back to the quiz
 
-                String dateString = new SimpleDateFormat(pattern).format( new Date());
-                currentQuiz.calculateResult();
+                String dateString = new SimpleDateFormat(pattern).format( new Date()); // create date
+                currentQuiz.calculateResult(); // find proper result
                 int result = currentQuiz.getResult();
-
+                // set the quiz to store values
                 currentQuiz.setResult(result);
                 currentQuiz.setQuizDate( dateString );
 

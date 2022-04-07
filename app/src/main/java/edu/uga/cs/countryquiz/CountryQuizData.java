@@ -20,19 +20,19 @@ public class CountryQuizData {
     public static final String DEBUG_TAG = "CountryQuizData";
 
     private SQLiteDatabase   db; // database ref for SQL commands
-    private SQLiteOpenHelper countryQuizDbHelper;
-    private static final String[] quizColumns = {
+    private SQLiteOpenHelper countryQuizDbHelper; // singleton instance
+    private static final String[] quizColumns = { // column array quiz
             CountryQuizDBHelper.QUIZ_COLUMN_ID,
             CountryQuizDBHelper.QUIZ_COLUMN_DATE,
             CountryQuizDBHelper.QUIZ_COLUMN_RESULT
     };
-    private static final String[] countryColumns = {
+    private static final String[] countryColumns = { // column array country
             CountryQuizDBHelper.COUNTRY_COLUMN_ID,
             CountryQuizDBHelper.COUNTRY_COLUMN_NAME,
             CountryQuizDBHelper.COUNTRY_COLUMN_CONTINENT
     };
 
-    public CountryQuizData( Context context ) {
+    public CountryQuizData( Context context ) { // pass in context to open singleton
         this.countryQuizDbHelper = CountryQuizDBHelper.getInstance( context );
     }
 
@@ -44,7 +44,7 @@ public class CountryQuizData {
 
     // Close the database
     public void close() {
-        if( countryQuizDbHelper != null ) {
+        if( countryQuizDbHelper != null ) { // protect from null pointer exception
             countryQuizDbHelper.close();
             Log.d(DEBUG_TAG, "CountryQuizData: db closed");
         }
@@ -53,13 +53,13 @@ public class CountryQuizData {
     public boolean isDBOpen()
     {
         return db.isOpen();
-    }
+    } // simple check to see if it is open needs to inherit from helper and chain returns
 
     // Retrieve all countries and return them as a List.
     // for retrieving the stored countries after having been read from csv file on initial startup.
     public List<Country> retrieveAllCountries() {
-        ArrayList<Country> countries = new ArrayList<>();
-        Cursor cursor = null;
+        ArrayList<Country> countries = new ArrayList<>(); // storage
+        Cursor cursor = null; // for iteration
 
         try {
             // Execute the select query on a cursor to iterate over stored countries

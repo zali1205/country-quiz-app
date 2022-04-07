@@ -7,12 +7,12 @@ package edu.uga.cs.countryquiz;
  */
 public class Quiz {
 
-    private long   id;
+    private long   id; // primary key
     private String quizDate;
     private int result;
-    private Question[] countryQs;
+    private Question[] countryQs; // store the question array
 
-    public Quiz()
+    public Quiz() // default constructor
     {
         this.id = -1;
         this.quizDate = null;
@@ -20,14 +20,14 @@ public class Quiz {
         this.countryQs = new Question[6];
     }
 
-    public Quiz(String quizDate, int result, Question[] countryQs) {
+    public Quiz(String quizDate, int result, Question[] countryQs) { // store country q's with result & date
         this.id = -1;  // for setting later
         this.quizDate = quizDate;
         this.result = result;
         this.countryQs = countryQs;
     }
 
-    public Quiz(String quizDate, int result) {
+    public Quiz(String quizDate, int result) { // store result and date for use with database
         this.id = -1;  // for setting later
         this.quizDate = quizDate;
         this.result = result;
@@ -58,14 +58,14 @@ public class Quiz {
         this.result = result;
     }
 
-    public void calculateResult() {
+    public void calculateResult() { // method to determine the result of the 6 questions inside the quiz
         int correct = 0;
         for (int i = 0; i < countryQs.length; i++) {
             if (countryQs[i].getCorrectlyAnswered() ==  true) {
                 correct++;
             }
         }
-        setResult(correct);
+        setResult(correct); // update result
     }
 
     public Question[] getCountryQs() {

@@ -14,15 +14,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class uses the created recycler adapter to populate a layout with proper cards
+ *
+ * Author - Drew Jenkins
+ */
 public class ResultsActivity extends AppCompatActivity {
 
     private final String TAG = "quiz reading";
 
-    private RecyclerView recyclerView;
-    private QuizRecyclerAdapter recyclerAdapter;
+    private RecyclerView recyclerView; // view
+    private QuizRecyclerAdapter recyclerAdapter; // adapter class
 
-    private CountryQuizData cqData = null;
-    private List<Quiz> quizList = null;
+    private CountryQuizData cqData = null; // db access to read
+    private List<Quiz> quizList = null; // list for storage
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +37,8 @@ public class ResultsActivity extends AppCompatActivity {
         recyclerView = findViewById( R.id.recyclerView );
 
         quizList = new ArrayList<Quiz>();
-        recyclerAdapter = new QuizRecyclerAdapter( quizList );
-        recyclerView.setAdapter( recyclerAdapter );
+        recyclerAdapter = new QuizRecyclerAdapter( quizList ); // pass basic list into the adapter
+        recyclerView.setAdapter( recyclerAdapter ); // set the view to the adapter
 
         cqData = new CountryQuizData( this );
         cqData.open();

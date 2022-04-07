@@ -30,21 +30,21 @@ public class Question {
     public Question(String countryName, String continent) {
         this.countryName = countryName;
         this.continent = continent;
-        this.description = "What continent is " + this.countryName + " in?";
+        this.description = "What continent is " + this.countryName + " in?"; // basic generation for Question
 
         Collections.shuffle(continentsList);
         if (continentsList.get(0).equals(continent)) {
-            totalAnswers.add(continentsList.get(2));
+            totalAnswers.add(continentsList.get(2)); // third element in shuffled list
         } else {
-            totalAnswers.add(continentsList.get(0));
+            totalAnswers.add(continentsList.get(0)); // first
         }
         if (continentsList.get(1).equals(continent)) {
-            totalAnswers.add(continentsList.get(2));
+            totalAnswers.add(continentsList.get(2)); // third
         } else {
-            totalAnswers.add(continentsList.get(1));
+            totalAnswers.add(continentsList.get(1)); // second
         }
         totalAnswers.add(continent);
-        Collections.shuffle(totalAnswers);
+        Collections.shuffle(totalAnswers); // shuffle generated answers for randomization of order
     }
 
     public String getCountryName() {

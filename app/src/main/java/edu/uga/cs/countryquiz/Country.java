@@ -7,11 +7,11 @@ package edu.uga.cs.countryquiz;
  */
 public class Country {
 
-    private long   id;
+    private long   id; // primary key for reference
     private String countryName;
     private String continent;
 
-    public Country()
+    public Country() // default
     {
         this.id = -1;
         this.countryName = null;
